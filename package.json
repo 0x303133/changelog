@@ -1,0 +1,17 @@
+{
+  "name": "changelog",
+  "version": "1.0.0",
+  "description": "PR-based changelog generator",
+  "author": "0x303133",
+  "main": "dist/index.js",
+  "bin": {
+    "changelog": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0x303133/changelog.git"
+  },
+  "scripts": {},
+  "keywords": ["changelog"],
+  "license": "MIT"
+}
