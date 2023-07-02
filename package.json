@@ -1,11 +1,11 @@
 {
-  "name": "changelog",
+  "name": "@0x303133/changelog",
   "version": "1.0.0",
   "description": "PR-based changelog generator",
   "author": "0x303133",
   "main": "dist/index.js",
   "bin": {
-    "changelog": ""
+    "test-changelog": "bin/cli"
   },
   "repository": {
     "type": "git",
@@ -13,7 +13,8 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "lint:fix": "eslint src --fix"
+    "lint:fix": "eslint src --fix",
+    "build": "tsc"
   },
   "keywords": [
     "changelog"
@@ -26,6 +27,8 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
+    "@types/node": "^20.3.3",
+    "@types/yargs": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
     "eslint": "^8.44.0",
