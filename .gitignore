@@ -131,3 +131,6 @@ dist
 
 # Webstorm
 .idea
+
+# Changelog Config
+.changelogc
