@@ -64,4 +64,18 @@ export async function run() {
   }
 
   const token = (await fs.readFile(path.join(cwd, ".changelogc"))).toString();
+
+  try {
+    await fs.access(path.join(cwd, "package.json"));
+  } catch (e) {
+    console.log(`[Changelog]: Package.json doesn't exist.`);
+    process.exit();
+  }
+
+  const pkg = JSON.parse((await fs.readFile(path.join(cwd, "package.json"))).toString())
+
+  if (!(pkg.repo && pkg.repository)) {
+    console.log(`[Changelog]: Repository doesn't exist in package.json`)
+    process.exit()
+  }
 }
