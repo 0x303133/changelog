@@ -22,4 +22,13 @@ export class Git {
 
     return raw as T[];
   }
+
+  public static get tags() {
+    return {
+      all: () => Git.exec<string>(["tag"]),
+      first: () => Git.exec<string>(["tag"])[0],
+      last: () => Git.exec<string>(["describe", "--abbrev=0", "--tags"])[0],
+      head: () => "HEAD",
+    }
+  }
 }
