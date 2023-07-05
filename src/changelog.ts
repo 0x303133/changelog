@@ -8,7 +8,7 @@ export type PullRequest = GithubPullRequest & { packages: string[] };
 
 export type Release = {
   title: string;
-  system_title: `${string}..${string}`;
+  system_title: `${string}...${string}`;
   commits: Commit[];
   pulls: PullRequest[];
   contributors: string[];
@@ -81,7 +81,7 @@ export class Changelog {
         title: tags[i + 1] === "HEAD" ? this.config["next-version"] : tags[i + 1],
         commits: commits,
         pulls: pulls,
-        system_title: `${tags[i]}..${tags[i + 1]}`,
+        system_title: `${tags[i]}...${tags[i + 1]}`,
         contributors: [...contributors],
       });
     }
