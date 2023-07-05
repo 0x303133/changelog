@@ -5,6 +5,8 @@ import path from "path";
 
 import { Git } from "./git";
 import { cwd } from "./utils";
+import { Changelog } from "./changelog";
+import { ConfigFactory } from "./config";
 
 const UNRELEASED = "unreleased";
 
@@ -74,7 +76,7 @@ export async function run() {
 
   const pkg = JSON.parse((await fs.readFile(path.join(cwd, "package.json"))).toString())
 
-  if (!(pkg.repo && pkg.repository)) {
+  if (!(pkg.repo || pkg.repository)) {
     console.log(`[Changelog]: Repository doesn't exist in package.json`)
     process.exit()
   }
