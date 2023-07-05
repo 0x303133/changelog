@@ -1,10 +1,15 @@
+import highlight from "cli-highlight";
 import process from "process";
 import fs from "fs/promises";
 import yargs from "yargs";
+import chalk from "chalk";
 import path from "path";
 
-import { Git } from "./git";
+import { ConfigFactory } from "./config";
+import { Changelog } from "./changelog";
+import { Render } from "./render";
 import { cwd } from "./utils";
+import { Git } from "./git";
 
 const UNRELEASED = "unreleased";
 
@@ -40,8 +45,8 @@ export async function run() {
       filename: {
         type: "string",
         description: "Output filename",
-        default: ""
-      }
+        default: "",
+      },
     })
     .example("changelog", 'Create a changelog for the changes after the latest available tag, under "Unreleased" section')
     .example("changelog --from=v0.1.0 --to=v0.3.0", "Create a changelog for the changes in all tags within the given range")
@@ -80,5 +85,26 @@ export async function run() {
   if (!(pkg.repo || pkg.repository)) {
     console.log(`[Changelog]: Repository doesn't exist in package.json`);
     process.exit();
+  }
+
+  const config = ConfigFactory.build(argv, pkg, token);
+
+  const releases = await new Changelog(config).createRelease();
+
+  const markdown = new Render(config).markdown(releases);
+
+  if (!argv.filename) {
+    let highlighted = highlight(markdown, {
+      language: "Markdown",
+      theme: {
+        section: chalk.bold,
+        string: chalk.hex("#0366d6"),
+        link: chalk.dim,
+      },
+    });
+
+    console.log(highlighted);
+  } else {
+    await fs.writeFile(path.join(cwd, `${argv.filename}.md`), markdown);
   }
 }
