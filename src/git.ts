@@ -1,5 +1,7 @@
 import { execa, execaSync } from "@esm2cjs/execa";
 
+import { cwd } from "./utils";
+
 type ParserFunction<T> = (value: string, index?: number) => T
 
 interface BaseGitStructure {
@@ -27,7 +29,7 @@ const commitParser: ParserFunction<Commit | null> = (commit) => {
     date: parts[5],
     user: parts[6],
   };
-}
+};
 
 export class Git {
   private static async execa<T = string>(args: string[], options?: Record<string, string>, pretty?: ParserFunction<T | null>): Promise<T[]> {
@@ -97,8 +99,15 @@ export class Git {
             `${hash}`,
           ];
           return (await Git.execa<Commit>(args, {}, commitParser))[0];
-        })) as unknown as Promise<Commit[]>
-      }
-    }
+        })) as unknown as Promise<Commit[]>;
+      },
+    };
+  }
+
+  public static get path() {
+    return {
+      root: () => Git.exec(["rev-parse", "--show-toplevel"], { cwd })[0],
+      changed: (sha: string) => Git.exec(["show", "-m", "--name-only", "--pretty=format:", "--first-parent", sha]),
+    };
   }
 }
