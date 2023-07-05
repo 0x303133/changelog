@@ -60,7 +60,7 @@ export class Render {
         if (pullLabels.indexOf(label) !== -1) return true;
       });
 
-      return { label, pulls: sorted };
+      return { label: this.config.labels[label], pulls: sorted };
     });
 
     return [...categories, { label: "Other", pulls: other }].filter((category) => category.pulls.length > 0);
