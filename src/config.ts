@@ -1,7 +1,9 @@
 import hostedInfo from "hosted-git-info";
 import process from "process";
 
-type BaseArgv = {
+export type Repository = `${string}/${string}`
+
+export type BaseArgv = {
   to: string
   from: string
   "next-version": string
@@ -9,15 +11,15 @@ type BaseArgv = {
   "contributors-marker": string
 }
 
-type Pkg = {
+export type Pkg = {
   repo?: { url: string }
   repository?: { url: string }
   labels?: Record<string, string>
   ignoreContributors?: string[]
 }
 
-type Config = BaseArgv & {
-  repository: string,
+export type Config = BaseArgv & {
+  repository: Repository,
   labels: Record<string, string>
   ignoreContributors: string[]
   token: string
@@ -56,7 +58,7 @@ export class ConfigFactory {
     };
   }
 
-  private static repository(pkg: Pkg) {
+  private static repository(pkg: Pkg): Repository {
     const repo = pkg.repo ? pkg.repo : pkg.repository as { url: string };
     if (!repo) {
       console.log(`[Changelog]: Couldn't found git repository. Please, provide it in package.json`);
