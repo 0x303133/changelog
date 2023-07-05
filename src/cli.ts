@@ -14,33 +14,32 @@ export async function run() {
     .options({
       from: {
         type: "string",
-        desc: "A git tag or commit hash that determines the lower bound of the range of commits",
-        defaultDescription: "latest tagged commit",
+        description: "A git tag or commit hash that determines the lower bound of the range of commits",
         default: Git.tags.first(),
       },
       to: {
         type: "string",
-        desc: "A git tag or commit hash that determines the upper bound of the range of commits",
+        description: "A git tag or commit hash that determines the upper bound of the range of commits",
         default: Git.tags.head(),
       },
       "next-version": {
         type: "string",
-        desc: "The name of the next version",
+        description: "The name of the next version",
         default: UNRELEASED,
       },
       "contributors-marker": {
         type: "string",
-        desc: "Contributors marker. Default: -",
+        description: "Contributors marker. Default: -",
         default: "-",
       },
       "commits-marker": {
         type: "string",
-        desc: "Commits marker. Default: *",
+        description: "Commits marker. Default: *",
         default: "*",
       },
       filename: {
         type: "string",
-        desc: "Output filename",
+        description: "Output filename",
         default: ""
       }
     })
