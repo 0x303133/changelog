@@ -66,7 +66,7 @@ export class Changelog {
         title: tags[i + 1] === "HEAD" ? this.config["next-version"] : tags[i + 1],
         pulls: pulls,
         system_title: tags[i + 1] === "HEAD" ? `${tags[i]}...${this.config["next-version"]}` : `${tags[i]}...${tags[i + 1]}`,
-        contributors: [...contributors],
+        contributors: [...contributors].filter(contributor => !this.config.ignoreContributors.includes(contributor)),
       });
     }
 
