@@ -2,6 +2,8 @@ import process from "process";
 import axios from "axios";
 
 import { Repository } from "./config";
+import { PullRequest } from "./changelog";
+import { getListOfUniquePackages } from "./utils";
 
 export interface GithubCommitsInPull {
   "sha": string;
@@ -56,10 +58,15 @@ export class Github {
       all: async (hashes: string[]) => {
         return (await Promise.all(hashes.map(async (hash) => {
           const raw = await this.pulls.bySha(hash);
-          const pull = await this.pulls.byId(raw.number);
-          if (pull.merged) return pull;
+          let api_pull = await this.pulls.byId(raw.number);
+          if (api_pull.merged) {
+            const pull: PullRequest = { ...api_pull, packages: [] };
+            const packages = getListOfUniquePackages(hash);
+            packages.length !== 0 ? pull["packages"] = packages : pull["packages"] = [];
+            return pull;
+          }
           return undefined;
-        }))).flat(2).filter(Boolean) as GithubPullRequest[];
+        }))).flat(2).filter(Boolean) as PullRequest[];
       },
     };
   }
