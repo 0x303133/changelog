@@ -38,6 +38,11 @@ export async function run() {
         desc: "Commits marker. Default: *",
         default: "*",
       },
+      filename: {
+        type: "string",
+        desc: "Output filename",
+        default: ""
+      }
     })
     .example("changelog", 'Create a changelog for the changes after the latest available tag, under "Unreleased" section')
     .example("changelog --from=v0.1.0 --to=v0.3.0", "Create a changelog for the changes in all tags within the given range")
@@ -47,6 +52,11 @@ export async function run() {
 
   if (!argv.from) {
     console.log(`[Changelog]: First tag doesn't exist. Please, create initial tag.`);
+    process.exit();
+  }
+
+  if (argv["next-version"] === UNRELEASED && argv.to === "HEAD") {
+    console.log(`[Changelog]: Next version not found. Please, provide next-version the same title as the new tag will be.`);
     process.exit();
   }
 
