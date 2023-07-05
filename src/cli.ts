@@ -5,8 +5,6 @@ import path from "path";
 
 import { Git } from "./git";
 import { cwd } from "./utils";
-import { Changelog } from "./changelog";
-import { ConfigFactory } from "./config";
 
 const UNRELEASED = "unreleased";
 
@@ -41,14 +39,8 @@ export async function run() {
         default: "*",
       },
     })
-    .example(
-      "changelog",
-      "Create a changelog for the changes after the latest available tag, under \"Unreleased\" section",
-    )
-    .example(
-      "changelog --from=v0.1.0 --to=v0.3.0",
-      "Create a changelog for the changes in all tags within the given range",
-    )
+    .example("changelog", 'Create a changelog for the changes after the latest available tag, under "Unreleased" section')
+    .example("changelog --from=v0.1.0 --to=v0.3.0", "Create a changelog for the changes in all tags within the given range")
     .epilog("For more information, see https://github.com/0x303133/changelog")
     .wrap(Math.min(100, yargs.terminalWidth()))
     .parse();
@@ -74,10 +66,10 @@ export async function run() {
     process.exit();
   }
 
-  const pkg = JSON.parse((await fs.readFile(path.join(cwd, "package.json"))).toString())
+  const pkg = JSON.parse((await fs.readFile(path.join(cwd, "package.json"))).toString());
 
   if (!(pkg.repo || pkg.repository)) {
-    console.log(`[Changelog]: Repository doesn't exist in package.json`)
-    process.exit()
+    console.log(`[Changelog]: Repository doesn't exist in package.json`);
+    process.exit();
   }
 }

@@ -2,7 +2,7 @@ import { execa, execaSync } from "@esm2cjs/execa";
 
 import { cwd } from "./utils";
 
-type ParserFunction<T> = (value: string, index?: number) => T
+type ParserFunction<T> = (value: string, index?: number) => T;
 
 interface BaseGitStructure {
   shortSHA: string;
@@ -32,10 +32,12 @@ const commitParser: ParserFunction<Commit | null> = (commit) => {
 };
 
 export class Git {
-  private static async execa<T = string>(args: string[], options?: Record<string, string>, pretty?: ParserFunction<T | null>): Promise<T[]> {
-    const raw = (await execa("git", args, options || {}))
-      .stdout.split("\n")
-      .filter(Boolean);
+  private static async execa<T = string>(
+    args: string[],
+    options?: Record<string, string>,
+    pretty?: ParserFunction<T | null>,
+  ): Promise<T[]> {
+    const raw = (await execa("git", args, options || {})).stdout.split("\n").filter(Boolean);
 
     if (pretty) return raw.map(pretty).filter(Boolean) as T[];
 
@@ -64,23 +66,11 @@ export class Git {
   public static get hashes() {
     return {
       commits: (from: string, to: string = "") => {
-        const args = [
-          `log`,
-          `--oneline`,
-          `--pretty=%H`,
-          `${from}..${to}`,
-        ];
+        const args = [`log`, `--oneline`, `--pretty=%H`, `${from}..${to}`];
         return Git.exec<string>(args);
       },
       pulls: (from: string, to: string = "") => {
-        const args = [
-          `log`,
-          `--oneline`,
-          `--first-parent`,
-          `--merges`,
-          `--pretty=%H`,
-          `${from}..${to}`,
-        ];
+        const args = [`log`, `--oneline`, `--first-parent`, `--merges`, `--pretty=%H`, `${from}..${to}`];
         return Git.exec<string>(args);
       },
     };
@@ -89,17 +79,19 @@ export class Git {
   public static get sha() {
     return {
       commits: async (hashes: string[]): Promise<Commit[]> => {
-        return await Promise.all(hashes.map(async (hash) => {
-          const args = [
-            `log`,
-            `-1`,
-            `--oneline`,
-            `--pretty=shash<%h> lhash<%H> ref<%D> message<%s> date<%cd> user<%an>`,
-            `--date=short`,
-            `${hash}`,
-          ];
-          return (await Git.execa<Commit>(args, {}, commitParser))[0];
-        })) as unknown as Promise<Commit[]>;
+        return (await Promise.all(
+          hashes.map(async (hash) => {
+            const args = [
+              `log`,
+              `-1`,
+              `--oneline`,
+              `--pretty=shash<%h> lhash<%H> ref<%D> message<%s> date<%cd> user<%an>`,
+              `--date=short`,
+              `${hash}`,
+            ];
+            return (await Git.execa<Commit>(args, {}, commitParser))[0];
+          }),
+        )) as unknown as Promise<Commit[]>;
       },
     };
   }

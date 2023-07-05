@@ -1,29 +1,29 @@
 import hostedInfo from "hosted-git-info";
 import process from "process";
 
-export type Repository = `${string}/${string}`
+export type Repository = `${string}/${string}`;
 
 export type BaseArgv = {
-  to: string
-  from: string
-  "next-version": string
-  "commits-marker": string
-  "contributors-marker": string
-}
+  to: string;
+  from: string;
+  "next-version": string;
+  "commits-marker": string;
+  "contributors-marker": string;
+};
 
 export type Pkg = {
-  repo?: { url: string }
-  repository?: { url: string }
-  labels?: Record<string, string>
-  ignoreContributors?: string[]
-}
+  repo?: { url: string };
+  repository?: { url: string };
+  labels?: Record<string, string>;
+  ignoreContributors?: string[];
+};
 
 export type Config = BaseArgv & {
-  repository: Repository,
-  labels: Record<string, string>
-  ignoreContributors: string[]
-  token: string
-}
+  repository: Repository;
+  labels: Record<string, string>;
+  ignoreContributors: string[];
+  token: string;
+};
 
 const defaultIgnore = [
   "dependabot-bot",
@@ -59,7 +59,7 @@ export class ConfigFactory {
   }
 
   private static repository(pkg: Pkg): Repository {
-    const repo = pkg.repo ? pkg.repo : pkg.repository as { url: string };
+    const repo = pkg.repo ? pkg.repo : (pkg.repository as { url: string });
     if (!repo) {
       console.log(`[Changelog]: Couldn't found git repository. Please, provide it in package.json`);
       process.exit();

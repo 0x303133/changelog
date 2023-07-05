@@ -19,8 +19,9 @@ function packageFromPath(path: string): string {
 }
 
 export function getListOfUniquePackages(sha: string): string[] {
-  return Git.path.changed(sha)
-    .map(path => packageFromPath(path))
+  return Git.path
+    .changed(sha)
+    .map((path) => packageFromPath(path))
     .filter(Boolean)
     .filter(onlyUnique);
 }
