@@ -65,11 +65,11 @@ export class Git {
 
   public static get hashes() {
     return {
-      commits: (from: string, to: string = "") => {
+      commits: (from: string, to = "") => {
         const args = [`log`, `--oneline`, `--pretty=%H`, `${from}..${to}`];
         return Git.exec<string>(args);
       },
-      pulls: (from: string, to: string = "") => {
+      pulls: (from: string, to = "") => {
         const args = [`log`, `--oneline`, `--first-parent`, `--merges`, `--pretty=%H`, `${from}..${to}`];
         return Git.exec<string>(args);
       },

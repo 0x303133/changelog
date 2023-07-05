@@ -58,7 +58,7 @@ export class Github {
           await Promise.all(
             hashes.map(async (hash) => {
               const raw = await this.pulls.bySha(hash);
-              let api_pull = await this.pulls.byId(raw.number);
+              const api_pull = await this.pulls.byId(raw.number);
               if (api_pull.merged) {
                 const pull: PullRequest = { ...api_pull, packages: [] };
                 const packages = getListOfUniquePackages(hash);
