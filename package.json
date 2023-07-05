@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "PR-based changelog generator",
   "author": "0x303133",
-  "main": "dist/index.js",
+  "main": "dist/changelog.js",
   "bin": {
-    "test-changelog": "bin/cli"
+    "changelog": "bin/cli"
   },
   "repository": {
     "type": "git",
