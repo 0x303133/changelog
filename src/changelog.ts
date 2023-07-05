@@ -1,15 +1,14 @@
 import process from "process";
 
 import { Github, GithubPullRequest } from "./github";
-import { Commit, Git } from "./git";
 import { Config } from "./config";
+import { Git } from "./git";
 
 export type PullRequest = GithubPullRequest & { packages: string[] };
 
 export type Release = {
   title: string;
   system_title: `${string}...${string}`;
-  commits: Commit[];
   pulls: PullRequest[];
   contributors: string[];
 };
@@ -56,32 +55,17 @@ export class Changelog {
     const Releases: Release[] = [];
 
     for (let i = 0; i < tags.length - 1; i++) {
-      const raw_commits = Git.hashes.commits(tags[i], tags[i + 1]);
-      const raw_pulls = Git.hashes.pulls(tags[i], tags[i + 1]);
+      const hashes = Git.hashes.pulls(tags[i], tags[i + 1]);
 
-      const commitsInPulls: string[] = [];
-
-      await Promise.all(
-        raw_pulls.map(async (pull) => {
-          const shaPull = await this.github.pulls.bySha(pull);
-          const commits_in_pull = (await this.github.pulls.commits(shaPull.number)).map((commit) => commit.sha);
-          commitsInPulls.push(...commits_in_pull);
-        }),
-      );
-      const commits_hashes = raw_commits.filter((el) => !raw_pulls.includes(el) && !commitsInPulls.includes(el));
-
-      const commits = await Git.sha.commits(commits_hashes);
-      const pulls = await this.github.pulls.all(raw_pulls);
+      const pulls = await this.github.pulls.all(hashes);
       const contributors: Set<string> = new Set();
 
-      commits.forEach((commit) => contributors.add(commit.user));
       pulls.forEach((pull) => contributors.add(pull.user.login));
 
       Releases.push({
         title: tags[i + 1] === "HEAD" ? this.config["next-version"] : tags[i + 1],
-        commits: commits,
         pulls: pulls,
-        system_title: `${tags[i]}...${tags[i + 1]}`,
+        system_title: tags[i + 1] === "HEAD" ? `${tags[i]}...${this.config["next-version"]}` : `${tags[i]}...${tags[i + 1]}`,
         contributors: [...contributors],
       });
     }
