@@ -1,11 +1,11 @@
 {
   "name": "@0x303133/changelog",
   "version": "1.0.0",
-  "description": "PR-based changelog generator",
+  "description": "PR-based changelog generator with monorepo support",
   "author": "0x303133",
-  "main": "dist/index.js",
+  "main": "dist/changelog.js",
   "bin": {
-    "test-changelog": "bin/cli"
+    "changelog": "bin/cli"
   },
   "repository": {
     "type": "git",
@@ -24,9 +24,14 @@
     "@esm2cjs/execa": "^6.1.1-cjs.1",
     "axios": "^1.4.0",
     "chalk": "4.1.2",
+    "cli-highlight": "^2.1.11",
+    "hosted-git-info": "^6.1.1",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
+    "@types/hosted-git-info": "^3.0.2",
+    "@types/node": "^20.3.3",
+    "@types/yargs": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "eslint": "^8.44.0",
