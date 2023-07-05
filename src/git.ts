@@ -8,7 +8,7 @@ export class Git {
       .stdout.split("\n")
       .filter(Boolean);
 
-    if (pretty) return raw.map(pretty).filter(Boolean)
+    if (pretty) return raw.map(pretty).filter(Boolean);
 
     return raw as T[];
   }
@@ -29,6 +29,31 @@ export class Git {
       first: () => Git.exec<string>(["tag"])[0],
       last: () => Git.exec<string>(["describe", "--abbrev=0", "--tags"])[0],
       head: () => "HEAD",
-    }
+    };
+  }
+
+  public static get hashes() {
+    return {
+      commits: (from: string, to: string = "") => {
+        const args = [
+          `log`,
+          `--oneline`,
+          `--pretty=%H`,
+          `${from}..${to}`,
+        ];
+        return Git.exec<string>(args);
+      },
+      pulls: (from: string, to: string = "") => {
+        const args = [
+          `log`,
+          `--oneline`,
+          `--first-parent`,
+          `--merges`,
+          `--pretty=%H`,
+          `${from}..${to}`,
+        ];
+        return Git.exec<string>(args);
+      },
+    };
   }
 }
