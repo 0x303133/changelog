@@ -1,7 +1,7 @@
 {
   "name": "@0x303133/changelog",
   "version": "1.0.0",
-  "description": "PR-based changelog generator",
+  "description": "PR-based changelog generator with monorepo support",
   "author": "0x303133",
   "main": "dist/changelog.js",
   "bin": {
