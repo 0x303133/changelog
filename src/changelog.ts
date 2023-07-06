@@ -58,6 +58,9 @@ export class Changelog {
       const hashes = Git.hashes.pulls(tags[i], tags[i + 1]);
 
       const pulls = await this.github.pulls.all(hashes);
+
+      if (pulls.length === 0) continue;
+
       const contributors: Set<string> = new Set();
 
       pulls.forEach((pull) => contributors.add(pull.user.login));
@@ -66,7 +69,7 @@ export class Changelog {
         title: tags[i + 1] === "HEAD" ? this.config["next-version"] : tags[i + 1],
         pulls: pulls,
         system_title: tags[i + 1] === "HEAD" ? `${tags[i]}...${this.config["next-version"]}` : `${tags[i]}...${tags[i + 1]}`,
-        contributors: [...contributors].filter(contributor => !this.config.ignoreContributors.includes(contributor)),
+        contributors: [...contributors].filter((contributor) => !this.config.ignoreContributors.includes(contributor)),
       });
     }
 
