@@ -25,7 +25,7 @@
     "axios": "^1.4.0",
     "chalk": "4.1.2",
     "cli-highlight": "^2.1.11",
-    "hosted-git-info": "^6.1.1",
+    "hosted-git-info": "^7.0.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
